@@ -1,0 +1,3 @@
+rootProject.name = 'PreEntrega'
+include 'com.techlab.business'
+include 'com.techlab.ui'
