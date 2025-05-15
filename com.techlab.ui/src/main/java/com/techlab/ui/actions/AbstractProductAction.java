@@ -50,7 +50,7 @@ public abstract class AbstractProductAction {
             int rawPickedOption = scanner.nextInt();
             scanner.nextLine();
 
-            if (rawPickedOption >= 1 || rawPickedOption <= 3) {
+            if (rawPickedOption >= 1 && rawPickedOption <= 3) {
                 pickedOption = rawPickedOption;
                 break;
             }
