@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class ConsoleUtil {
     // https://stackoverflow.com/a/32295974/10942774
     public static void clearConsole() {
-        System.out.print("\033[H\033[2J");
+        System.out.print("\\u001B[H\\u001B[2J");
         System.out.flush();
     }
 

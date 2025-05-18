@@ -1,9 +1,14 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'application'
     id 'java'
 }
-
 group = 'com.techlab'
 version = '1.1.1'
+
+application {
+    mainClass = 'com.techlab.ui.Main'
+}
 
 repositories {
     mavenCentral()

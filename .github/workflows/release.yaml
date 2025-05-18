@@ -1,0 +1,62 @@
+name: Release app
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [21]
+        java-app-name: ['ecommerce-app']
+        java-build-package: ['com.techlab.ui']
+    
+    steps:
+      - name: Checkout repo code
+        uses: actions/checkout@v4
+      
+      - name: Set up JDK ${{ matrix.java-version }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: 'temurin'
+
+      # https://stackoverflow.com/a/58282862/10942774
+      - name: Change gradle's wrapper permissions
+        run: chmod +x ./gradlew
+      
+      - name: Build JAR
+        run: ./gradlew :${{ matrix.java-build-package }}:shadowJar
+
+      - name: Upload JAR as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.java-app-name }}
+          path: ./${{ matrix.java-build-package }}/build/libs/*.jar
+          
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-app-name: ['ecommerce-app']
+
+    steps:
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.java-app-name }}
+
+      - name: Rename JAR file
+        run: mv ./*.jar ${{ matrix.java-app-name }}.jar
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          files: ./${{ matrix.java-app-name }}.jar
+        env:
+          GITHUB_TOKEN: ${{ secrets.SECRET_TOKEN }}
