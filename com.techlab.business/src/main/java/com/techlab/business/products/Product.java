@@ -34,7 +34,7 @@ public class Product {
     }
 
     public void decreaseQuantity(int quantity) throws InvalidProductDataException {
-        if (quantity <= this.quantity) {
+        if (quantity > this.quantity) {
             throw new InvalidProductDataException("No se puede reducir el stock ya que la cantidad solicitada supera al stock disponible.");
         }
 

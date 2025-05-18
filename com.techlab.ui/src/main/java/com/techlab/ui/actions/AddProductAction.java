@@ -1,6 +1,7 @@
 package com.techlab.ui.actions;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.techlab.business.products.Product;
@@ -18,21 +19,18 @@ public class AddProductAction extends AbstractProductAction {
         String name = this.requestName(scanner);
         if (name == null) {
             this.printActionCancelled(scanner);
-            scanner.close();
             return;
         }
 
         int stock = this.requestStock(scanner);
         if (stock == 0) {
             this.printActionCancelled(scanner);
-            scanner.close();
             return;
         }
 
         double price = this.requestPrice(scanner);
         if (price == 0) {
             this.printActionCancelled(scanner);
-            scanner.close();
             return;
         }
 
@@ -52,7 +50,7 @@ public class AddProductAction extends AbstractProductAction {
     }
 
     protected void printActionTitle() {
-        System.out.println("=========================\n");
+        System.out.println("=========================");
         System.out.println("Añadir producto - TechLab");
         System.out.println("=========================\n");
     }
@@ -95,19 +93,25 @@ public class AddProductAction extends AbstractProductAction {
             this.printActionTitle();
 
             System.out.print("Ingrese el stock del producto: ");
-            int rawProductStock = scanner.nextInt();
-            scanner.nextLine();
 
-            if (rawProductStock == 0) {
-                break;
+            try {
+                int rawProductStock = scanner.nextInt();
+                scanner.nextLine();
+
+                if (rawProductStock == 0) {
+                    break;
+                }
+
+                if (rawProductStock > 0) {
+                    stock = rawProductStock;
+                    break;
+                }
+
+                System.out.println("Ingresa un stock que sea positivo. Ingresa \"0\" para salir de esta acción.");
+            } catch (InputMismatchException e) {
+                System.out.println("Ingresa un stock que al menos sea numérico. Ingresa \"0\" para salir de esta acción.");
             }
 
-            if (rawProductStock > 0) {
-                stock = rawProductStock;
-                break;
-            }
-
-            System.out.println("Ingresa un stock válido. Ingresa \"0\" para salir de esta acción.");
             ConsoleUtil.pressEnterToContinue(scanner);
         }
 
@@ -122,19 +126,25 @@ public class AddProductAction extends AbstractProductAction {
             this.printActionTitle();
 
             System.out.print("Ingrese el precio del producto: ");
-            double rawProductPrice = scanner.nextDouble();
-            scanner.nextLine();
 
-            if (rawProductPrice == 0) {
-                break;
+            try {
+                double rawProductPrice = scanner.nextDouble();
+                scanner.nextLine();
+
+                if (rawProductPrice == 0) {
+                    break;
+                }
+
+                if (rawProductPrice > 0) {
+                    price = rawProductPrice;
+                    break;
+                }
+
+                System.out.println("Ingresa un precio válido. Ingresa \"0\" para salir de esta acción.");
+            } catch (InputMismatchException e) {
+                System.out.println("Ingresa un precio numérico/decimal. Ingresa \"0\" para salir de esta acción");
             }
 
-            if (rawProductPrice > 0) {
-                price = rawProductPrice;
-                break;
-            }
-
-            System.out.println("Ingresa un precio válido. Ingresa \"0\" para salir de esta acción.");
             ConsoleUtil.pressEnterToContinue(scanner);
         }
 

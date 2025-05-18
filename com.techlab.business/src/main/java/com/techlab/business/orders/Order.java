@@ -49,7 +49,7 @@ public class Order {
 
     public boolean isProcessable() {
         for (OrderQuantity orderQuantity : orders) {
-            if (orderQuantity.getQuantity() <= orderQuantity.getProduct().getQuantity()) {
+            if (orderQuantity.getQuantity() > orderQuantity.getProduct().getQuantity()) {
                 return false;
             }
         }

@@ -1,6 +1,7 @@
 package com.techlab.ui.actions;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.techlab.business.exceptions.InvalidProductDataException;
@@ -22,7 +23,7 @@ public class FindAndUpdateProductAction extends AbstractProductAction {
     }
 
     protected void printActionTitle() {
-        System.out.println("=========================\n");
+        System.out.println("=========================");
         System.out.println("Editar producto - TechLab");
         System.out.println("=========================\n");
     }
@@ -43,22 +44,26 @@ public class FindAndUpdateProductAction extends AbstractProductAction {
             System.out.println("3) Añadir stock.");
             System.out.println("4) Salir.");
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
-
             try {
-                switch (option) {
-                    case 1 -> this.updateProductName(product, scanner);
-                    case 2 -> this.updateProductPrice(product, scanner);
-                    case 3 -> this.increaseProductStock(product, scanner);
-                    case 4 -> continueUpdating = false;
-                    default -> {
-                        System.out.println("Ingresa una opción válida.");
-                        ConsoleUtil.pressEnterToContinue(scanner);
+                int option = scanner.nextInt();
+                scanner.nextLine();
+
+                try {
+                    switch (option) {
+                        case 1 -> this.updateProductName(product, scanner);
+                        case 2 -> this.updateProductPrice(product, scanner);
+                        case 3 -> this.increaseProductStock(product, scanner);
+                        case 4 -> continueUpdating = false;
+                        default -> {
+                            System.out.println("Ingresa una opción válida.");
+                            ConsoleUtil.pressEnterToContinue(scanner);
+                        }
                     }
+                } catch (InvalidProductDataException exception) {
+                    System.out.println("No se pudo actualizar el producto: " + exception.getMessage());
                 }
-            } catch (InvalidProductDataException exception) {
-                System.out.println("No se pudo actualizar el producto: " + exception.getMessage());
+            } catch (InputMismatchException e) {
+                System.out.println("Ingresa una opción que sea numérica.");
             }
         }
     }
@@ -95,37 +100,57 @@ public class FindAndUpdateProductAction extends AbstractProductAction {
             System.out.println("Producto: " + product + ".\n");
 
             System.out.println("Ingresa el nuevo precio (0 para cancelar): ");
-            double price = scanner.nextDouble();
-            scanner.nextLine();
 
-            if (price == 0) {
-                break;
+            try {
+                double price = scanner.nextDouble();
+                scanner.nextLine();
+
+                if (price == 0) {
+                    break;
+                }
+
+                if (price > 0) {
+                    product.setPrice(price);
+                    break;
+                }
+
+                System.out.println("Ingresa un precio válido. Ingresa \"0\" para cancelar esta acción.");
+            } catch (InputMismatchException e) {
+                System.out.println("Ingresa un precio numérico. Ingresa \"0\" para cancelar esta acción.");
             }
 
-            if (price > 0) {
-                product.setPrice(price);
-                break;
-            }
-
-            System.out.println("Ingresa un precio válido.");
             ConsoleUtil.pressEnterToContinue(scanner);
         }
     }
 
     private void increaseProductStock(Product product, Scanner scanner) {
-        ConsoleUtil.clearConsole();
-        this.printActionTitle();
+        while (true) {
+            ConsoleUtil.clearConsole();
+            this.printActionTitle();
 
-        System.out.println("Producto: " + product + ".\n");
+            System.out.println("Producto: " + product + ".\n");
 
-        System.out.println("Ingresa la cantidad a añadir (0 para cancelar): ");
-        int stock = scanner.nextInt();
-        scanner.nextLine();
+            System.out.println("Ingresa la cantidad a añadir (0 para cancelar): ");
 
-        if (stock == 0) {
-            return;
+            try {
+                int stock = scanner.nextInt();
+                scanner.nextLine();
+
+                if (stock == 0) {
+                    return;
+                }
+
+                if (stock > 0) {
+                    product.increaseQuantity(stock);
+                    break;
+                }
+
+                System.out.println("Ingresa una cantidad positiva. Ingresa \"0\" para cancelar esta acción.");
+            } catch (InputMismatchException e) {
+                System.out.println("Ingresa una cantidad numérica. Ingresa \"0\" para cancelar esta acción.");
+            }
+
+            ConsoleUtil.pressEnterToContinue(scanner);
         }
-
-        product.increaseQuantity(stock);
     }
 }

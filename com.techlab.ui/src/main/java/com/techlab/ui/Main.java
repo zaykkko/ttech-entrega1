@@ -1,6 +1,7 @@
 package com.techlab.ui;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.techlab.business.orders.Order;
@@ -22,17 +23,22 @@ public class Main {
             Main.printHomeTitle();
             Main.printHomeOptions();
 
-            int option = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                int option = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (option) {
-                case 1 -> new AddProductAction(scanner, products).performAction();
-                case 2 -> new ListProductsAction(scanner, products).performAction();
-                case 3 -> new FindAndUpdateProductAction(scanner, products).performAction();
-                case 4 -> new DeleteProductAction(scanner, products).performAction();
-                case 5 -> new CreateOrderAction(scanner, products, orders).performAction();
-                case 6 -> new ListOrdersAction(scanner, products, orders).performAction();
-                case 7 -> continueLoop = false;
+                switch (option) {
+                    case 1 -> new AddProductAction(scanner, products).performAction();
+                    case 2 -> new ListProductsAction(scanner, products).performAction();
+                    case 3 -> new FindAndUpdateProductAction(scanner, products).performAction();
+                    case 4 -> new DeleteProductAction(scanner, products).performAction();
+                    case 5 -> new CreateOrderAction(scanner, products, orders).performAction();
+                    case 6 -> new ListOrdersAction(scanner, products, orders).performAction();
+                    case 7 -> continueLoop = false;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Ingresa una opción numérica válida.");
+                ConsoleUtil.pressEnterToContinue(scanner);
             }
         }
 
@@ -40,7 +46,7 @@ public class Main {
     }
 
     public static void printHomeTitle() {
-        System.out.println("============================\n");
+        System.out.println("============================");
         System.out.println("Sistema de gestión - TechLab");
         System.out.println("============================\n");
     }

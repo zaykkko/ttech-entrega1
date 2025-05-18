@@ -37,7 +37,7 @@ public class DeleteProductAction extends AbstractProductAction {
     }
 
     protected void printActionTitle() {
-        System.out.println("=========================\n");
+        System.out.println("=========================");
         System.out.println("Editar producto - TechLab");
         System.out.println("=========================\n");
     }

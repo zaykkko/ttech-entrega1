@@ -16,16 +16,20 @@ public class ListOrdersAction extends AbstractOrderAction {
         ConsoleUtil.clearConsole();
         this.printActionTitle();
 
-        for (Order order : this.orders) {
-            order.printOrder();
-            System.out.print("\n");
+        if (this.orders.isEmpty()) {
+            System.out.println("Todavía no se agregó ninguna orden.\n");
+        } else {
+            for (Order order : this.orders) {
+                order.printOrder();
+                System.out.print("\n");
+            }
         }
 
         ConsoleUtil.pressEnterToContinue(scanner);
     }
 
     protected void printActionTitle() {
-        System.out.println("======================\n");
+        System.out.println("======================");
         System.out.println("Listar pedidos - TechLab");
         System.out.println("======================\n");
     }

@@ -15,16 +15,21 @@ public class ListProductsAction extends AbstractProductAction {
         ConsoleUtil.clearConsole();
         this.printActionTitle();
 
-        for (Product product : this.products) {
-            System.out.println(product);
+        if (this.products.isEmpty()) {
+            System.out.println("Todavía no se agregó ningún producto.\n");
+        } else {
+            for (Product product : this.products) {
+                System.out.println(product);
+            }
+            System.out.println("\n");
         }
 
         ConsoleUtil.pressEnterToContinue(scanner);
     }
 
     protected void printActionTitle() {
-        System.out.println("==============================\n");
-        System.out.println("Eliminar un producto - TechLab");
-        System.out.println("==============================\n");
+        System.out.println("==========================");
+        System.out.println("Listar productos - TechLab");
+        System.out.println("==========================\n");
     }
 }

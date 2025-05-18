@@ -10,7 +10,7 @@ public class ConsoleUtil {
     }
 
     public static void pressEnterToContinue(Scanner scanner) {
-        System.out.println("Presiona \"enter\" para continuar.");
+        System.out.println("Presiona \"enter\" para continuar...");
         scanner.nextLine();
     }
 }
